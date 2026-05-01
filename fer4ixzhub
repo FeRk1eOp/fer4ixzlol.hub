@@ -26,7 +26,7 @@ local MM2_PLACE_IDS = {
 
 -- ID мест для Volleyball Legends
 local VB_PLACE_IDS = {
-    553135474,   -- основная
+    73956553001240,   -- основная
     8941101170,
     9032655645,
 }

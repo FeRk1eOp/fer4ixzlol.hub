@@ -50,14 +50,13 @@ end
 -- =====================================================
 local function loadMM2Script()
     print("Loading Murder Mystery 2 script...")
-    
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FeRk1eOp/volleyballscript.lol/refs/heads/main/MM2", true))()
     warn("MM2 script not inserted. Please insert your final MM2 script here.")
 end
 
 local function loadVolleyballScript()
     print("Loading Volleyball Legends script...")
-
-    -- >>> ВСТАВЬТЕ СЮДА ВЕСЬ ВАШ ФИНАЛЬНЫЙ СКРИПТ ДЛЯ VB (ESP, Hitbox, Air Control, AutoSpin, Tracer, Config) <<<
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FeRk1eOp/volleyballscript.lol/refs/heads/main/skibidi", true))()
     warn("Volleyball script not inserted. Please insert your final Volleyball script here.")
 end
 

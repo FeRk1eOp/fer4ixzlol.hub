@@ -13,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 while not LocalPlayer do task.wait() end
 
 -- === НАСТРОЙКИ ===
-local VALID_KEY = "QuIeoPgdGsnnSarUop"            -- замените на свой ключ
+local VALID_KEY = "fer4ixzmatadora666"            -- замените на свой ключ
 local DISCORD_LINK = "https://discord.gg/gKTS29RjTP"  -- ссылка-приглашение
 
 -- ID мест для Murder Mystery 2 (основные карты)

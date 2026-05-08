@@ -1,11 +1,12 @@
 -- =====================================================
 -- Key System + Game Detector + Script Loader
 -- для Murder Mystery 2 и Volleyball Legends
+-- УЛУЧШЕННАЯ ВЕРСИЯ с авто-детектом по названию игры
 -- =====================================================
 
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
-local UserInputServiwce = game:GetService("UserInputService")
+local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
@@ -24,7 +25,7 @@ local MM2_PLACE_IDS = {
     10323547615,
 }
 
--- ID мест для Volleyball Legends
+-- ID мест для Volleyball Legends (известные)
 local VB_PLACE_IDS = {
     73956553001240,
     86789627188240,
@@ -34,7 +35,6 @@ local VB_PLACE_IDS = {
     79136731857959,
     81895645060208,
     86783053375709,
-    86789627188240,
     90380040747314,
     94599491166169,
     96802054849934,
@@ -49,20 +49,51 @@ local VB_PLACE_IDS = {
     128017040519391,
     132469448336101,
     134314141048307,
-    102580589030177,
 }
 
+-- Ключевые слова для определения игры по названию
+local VB_KEYWORDS = {"volleyball", "volley ball", "vb legends"}
+local MM2_KEYWORDS = {"murder mystery", "mm2"}
+
 -- =====================================================
--- Определение текущей игры
+-- Определение текущей игры (улучшенное)
 -- =====================================================
 local function getGameType()
     local placeId = game.PlaceId
+    local gameId = game.GameId
+    local placeName = string.lower(game.PlaceId and tostring(game.PlaceId) or "")
+    
+    -- Пытаемся получить название места через API (опционально)
+    local placeTitle = ""
+    pcall(function()
+        if game:GetService("MarketplaceService"):GetProductInfo(placeId).Name then
+            placeTitle = string.lower(game:GetService("MarketplaceService"):GetProductInfo(placeId).Name)
+        end
+    end)
+    
+    -- Проверка по известным Place ID
     for _, id in ipairs(MM2_PLACE_IDS) do
         if id == placeId then return "MM2" end
     end
     for _, id in ipairs(VB_PLACE_IDS) do
         if id == placeId then return "Volleyball" end
     end
+    
+    -- Если не найдено по ID, проверяем по названию (для новых режимов VB)
+    for _, keyword in ipairs(VB_KEYWORDS) do
+        if string.find(placeTitle, keyword) then
+            warn("[Auto-Detect] Volleyball Legends detected by name: " .. placeTitle)
+            return "Volleyball"
+        end
+    end
+    
+    for _, keyword in ipairs(MM2_KEYWORDS) do
+        if string.find(placeTitle, keyword) then
+            warn("[Auto-Detect] Murder Mystery 2 detected by name: " .. placeTitle)
+            return "MM2"
+        end
+    end
+    
     return "Unknown"
 end
 

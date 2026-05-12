@@ -1,6 +1,6 @@
 -- =====================================================
 -- Key System + Game Detector + Script Loader
--- для Murder Mystery 2 и Volleyball Legends
+-- для Murder Mystery 2, Volleyball Legends и Kick a Lucky Block
 -- УЛУЧШЕННАЯ ВЕРСИЯ с авто-детектом по названию игры
 -- =====================================================
 
@@ -51,9 +51,15 @@ local VB_PLACE_IDS = {
     134314141048307,
 }
 
+-- ID мест для Kick a Lucky Block
+local KALB_PLACE_IDS = {
+    89469502395769,
+}
+
 -- Ключевые слова для определения игры по названию
 local VB_KEYWORDS = {"volleyball", "volley ball", "vb legends"}
 local MM2_KEYWORDS = {"murder mystery", "mm2"}
+local KALB_KEYWORDS = {"kick a lucky block", "kick lucky block", "lucky block"}
 
 -- =====================================================
 -- Определение текущей игры (улучшенное)
@@ -78,8 +84,18 @@ local function getGameType()
     for _, id in ipairs(VB_PLACE_IDS) do
         if id == placeId then return "Volleyball" end
     end
+    for _, id in ipairs(KALB_PLACE_IDS) do
+        if id == placeId then return "KickALuckyBlock" end
+    end
     
-    -- Если не найдено по ID, проверяем по названию (для новых режимов VB)
+    -- Если не найдено по ID, проверяем по названию (для новых режимов)
+    for _, keyword in ipairs(KALB_KEYWORDS) do
+        if string.find(placeTitle, keyword) then
+            warn("[Auto-Detect] Kick a Lucky Block detected by name: " .. placeTitle)
+            return "KickALuckyBlock"
+        end
+    end
+    
     for _, keyword in ipairs(VB_KEYWORDS) do
         if string.find(placeTitle, keyword) then
             warn("[Auto-Detect] Volleyball Legends detected by name: " .. placeTitle)
@@ -110,6 +126,11 @@ local function loadVolleyballScript()
     print("Loading Volleyball Legends script...")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/FeRk1eOp/volleyballscript.lol/refs/heads/main/skibidi", true))()
     warn("Volleyball script not inserted. Please insert your final Volleyball script here.")
+end
+
+local function loadKickALuckyBlockScript()
+    print("Loading Kick a Lucky Block script...")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FeRk1eOp/kickalucky/refs/heads/main/script", true))()
 end
 
 -- =====================================================
@@ -208,6 +229,8 @@ VerifyBtn.MouseButton1Click:Connect(function()
             loadMM2Script()
         elseif gameType == "Volleyball" then
             loadVolleyballScript()
+        elseif gameType == "KickALuckyBlock" then
+            loadKickALuckyBlockScript()
         else
             warn("Unknown game. Script not loaded.")
         end
